@@ -17,16 +17,18 @@ AF_DCMotor motor_L(2);
 // globals
 long prevT = 0;
 int posPrev = 0;
-// Use the "volatile" directive for variables
-// used in an interrupt
-volatile int pos_a = 0;
 unsigned long prevTime = 0;  // for step function generator
 const int valY_center = 530;  // measure the nominal reading of the joystick in the neutral position
 int deltaY = valY_center;  // joystick value
+int dirMotorL = FORWARD;
+int pos1 = 0;
+
+// Use the "volatile" directive for variables used in an interrupt
+volatile int pos_a = 0;
 
 // filter variables
-float v1Filt = 0;
-float v1Prev = 0;
+float v1Filt = 0;    //filtered velocity value
+float v1Prev = 0;  //prev filtered velocity value
 
 //PID integrator variable
 float eintegral = 0;
@@ -56,15 +58,13 @@ void setup() {
 
 void loop() {
 
-  int full_range = 1024;  // Uno analog input resolution
+  const int full_range = 1024;  // Uno analog input resolution
   const int deadBand = 30;  // measure how noisy the joystick in the neutral position, then set this large enough to ingore.
-  int Tsample = 80;    //ms  set this as small as possible to achieve a decent number of counts to get a velocity reading.
-  int maxSpeed = 200;  // max motor driver pwm input (motor saturates in rpm at about 190)
-  int dirMotorL = FORWARD;
+  const int Tsample = 80;    //ms  set this as small as possible to achieve a decent number of counts to get a velocity reading.
+  const int maxSpeed = 200;  // max motor driver pwm input (motor saturates in rpm at about 190)
 
   // read the position in an atomic block
   // to avoid potential misreads
-  int pos1 = 0;
   ATOMIC_BLOCK(ATOMIC_RESTORESTATE) {
     pos1 = pos_a;
   }
@@ -78,11 +78,11 @@ void loop() {
     deltaY = abs(analogRead(VRY));
 
     // overide joystick to test a step function - comment out to use joystick values
-//        unsigned long elapsedStepTime = currT - prevTime;
-//        if (elapsedStepTime > 5000) {
-//          deltaY = deltaY == valY_center ? 800 : valY_center;
-//          prevTime = currT;
-//        }
+    //        unsigned long elapsedStepTime = currT - prevTime;
+    //        if (elapsedStepTime > 5000) {
+    //          deltaY = deltaY == valY_center ? 800 : valY_center;
+    //          prevTime = currT;
+    //        }
 
     // motor speed from Y value
     int motorSpeedL = 0, motorSpeedR = 0;
