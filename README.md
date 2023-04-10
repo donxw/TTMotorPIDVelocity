@@ -43,6 +43,7 @@ Every 80 milliseconds the following actions occur:
 9)  Reset the counter to zero
 
 Issues
+
 Overall the PI loop controls the motor velocity fairly well.  However there are challenges.
 *  The encoder count is very low therefore the speed measurment resolution is very low.  Small variations in count make a large differnce in measured speed. The measured velocity is fixed to the number of counts per sample period.  The sample period was chosed to allow at least one count at the lowest desired velocity of 40 RPM.  At 80ms sample time, the resolution is 18.75 RPM.  2 counts per sample time equates to 37.5 RPM.  If the target velocity is set at 40 RPM, the feedback velocity will settle at between 2 to 3 counts per sample period or 37.5 to 56.25RPM.  So there will be a lot of velocity jitter which makes control difficult.  The filter helps signicantly in averaging the jitter out, but performance at low speed is still jittery.
 *  The encoder has a 20 slot wheel, but the interrupt will return a count of 40 for one revolution whether set to rising, falling or change.  Change was used.  The RPM returned by the counts matches what is measured by an external tachometer so it seems to be working to use 40 as the number of encoder counts per revolution.
