@@ -31,16 +31,17 @@ This projects adapts the PI closed loop code and the signal filter to control a 
 
 ## Overview
 Every 80 milliseconds the following actions occur:
-1)  Read the current count from the encoder
+1)  Read the current encoder count
 2)  Read the Joystick Y axis input
 3)  Convert the Joystick input into a velocity command and direction
 4)  Compute the current speed of the motor using the number of encoder counts and elapse time
 ![image](https://user-images.githubusercontent.com/31633408/230810741-ed3456eb-4c98-4d36-bfc4-327f3b1e5607.png)
 5)  Filter the speed using a 25Hz low pass filter (see Curio Res reference)
-6)  Compute the control signal using a PI filter
+6)  Compute error between desired velocity and actual velocity (filtered)
+6)  Compute the control signal from the error signal using a PI filter
 7)  Use the absolute value of the control signal as the PWM input to the motor driver speed input
-8)  Use the joystick command direction as input to the motor driver direction input
-9)  Reset the counter to zero
+8)  Use the joystick direction as input to the motor driver direction input
+9)  Reset the encoder count to zero
 
 Issues
 
