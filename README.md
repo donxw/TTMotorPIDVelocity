@@ -43,11 +43,25 @@ Every 80 milliseconds the following actions occur:
 8)  Use the joystick direction as input to the motor driver direction input
 9)  Reset the encoder count to zero
 
-Issues
+## Issues
 
 Overall the PI loop controls the motor velocity fairly well.  However there are challenges.
-*  The encoder count is very low therefore the speed measurment resolution is poor.  With a sample time of 80ms and 40 counts per encoder rev, the speed can only be measured in 18.5 RPM increments. The Joystick can command with much finder resolution than the encoder can measure velocity.  For example, if the target velocity is set at 40 RPM, the feedback velocity will settle at between 2 to 3 counts per sample period or 37.5 to 56.25RPM.  So there will be a lot of velocity jitter which makes control difficult.  The filter helps signicantly in averaging the encoder jitter out, but performance at low speed is still jittery.
+*  The encoder count is very low therefore the speed measurment resolution is poor.  With a sample time (Ts) of 150ms and 40 counts per encoder rev, the speed can only be measured in 10 RPM increments. The Joystick can command with much finder resolution than the encoder can measure velocity.  For example, if the target velocity is set at 55 RPM, the feedback velocity will settle at between 5 and 6 counts per sample period or 50 to 60 RPM.  So there will be a lot of velocity jitter which makes control difficult.  The filter helps signicantly in averaging the encoder jitter out, but performance at low speed is still jittery.
 *  The encoder has a 20 slot wheel, but the interrupt will return a count of 40 for one revolution whether set to rising, falling or change.  Change was used.  The RPM returned by the counts matches what is measured by an external tachometer so it seems to be working to use 40 as the number of encoder counts per revolution.
 *  The typical aduino joystick has a high gain and then saturates very quickly.  The readings seem to hit the limits of 0 or 1024 at ~70% of joystick travel in either direction.  The joystick therefore is hard to keep from going full throttle in use.  The Mouser electronics joystick is much more linear in that the min/max A2D values are not hit until the ends of the joystick travel.  This gives a much easier experience in commanding a speed between the limits.  The joystick does not come mounted to a PCB but it is not difficult to design a simple PCB which takes the signals to a connector.
-*  Despite these issues, the velocity control is acceptable for someting like an RC car, but to be used with more precision, it would be best to pick distinct speeds that align with the resolution of the encoder.  For example if a more precise 40RPM is needed, then the joystick input should be replaced with a discreet input command and the sample time needs to be adjusted to allow the desired velocity to be at one of the discrete resolution steps.  For example, reducing the sample time to 75ms increases the resolution from 18.75 to 20 RPM.  Thus allowing the velocity feedback to be able to hit 40 RPM by counting exactly 2 pulses each sample period.
 
+## Response
+
+Ts = 150ms, K = 1.0, I = 0.9
+
+Step Response
+
+![step_ts150_k1_i_9](https://user-images.githubusercontent.com/31633408/231054976-0abf7c89-bb57-4379-a2d9-0aad7b55de59.png)
+
+Stairstep Response
+
+![stairstep_Ts150_k1_i_9](https://user-images.githubusercontent.com/31633408/231055100-07fd93ab-f8ef-4a86-92eb-e163b8891487.png)
+
+Joystick following
+
+![Joystick_resp_Ts150_K1_i_9](https://user-images.githubusercontent.com/31633408/231055354-737df772-9227-4e8f-b07e-f86d12582173.png)
