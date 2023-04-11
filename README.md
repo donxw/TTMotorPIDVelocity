@@ -10,7 +10,8 @@ This projects adapts the PI closed loop code and the signal filter to control a 
 * Joystick from Mouser Electronics:  611-THB001P
 * Arduino Uno - generic from Aliexpress
 * Adafruit V1 motor shield - generic from Aliexpress
-* TTmotor - generic from Aliexpress
+* TTmotor - generic from Aliexpress (~ $1.50 ea in sets of ten)
+* Photoelectric Speed Sensor - generic from Aliexpress (~$1.60 ea in sets of ten)
 * 9v rechargable battery - TalentCell 500mAh from Amazon
 
 ## Wiring
