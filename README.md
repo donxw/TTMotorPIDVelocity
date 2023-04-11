@@ -30,7 +30,7 @@ This projects adapts the PI closed loop code and the signal filter to control a 
 * Connected to M2 terminal
 
 ## Overview
-Every 80 milliseconds the following actions occur:
+Every sample time the following actions occur:
 1)  Read the current encoder count
 2)  Read the Joystick Y axis input
 3)  Convert the Joystick input into a velocity command and direction
