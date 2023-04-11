@@ -38,8 +38,8 @@ Every sample time the following actions occur:
 4)  Compute the current speed of the motor using the number of encoder counts and elapse time
 ![image](https://user-images.githubusercontent.com/31633408/230810741-ed3456eb-4c98-4d36-bfc4-327f3b1e5607.png)
 5)  Filter the speed using a 25Hz low pass filter (see Curio Res reference)
-6)  Compute error between desired velocity and actual velocity (filtered)
-7)  Compute the control signal from the error signal using a PI filter
+6)  Compute error between desired velocity and measured and filtered velocity
+7)  Compute the control signal from the error using a PI filter (see Curio Res reference)
 8)  Use the absolute value of the control signal as the PWM input to the motor driver speed input
 9)  Use the joystick direction as input to the motor driver direction input
 10)  Reset the encoder count to zero
