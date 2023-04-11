@@ -55,12 +55,12 @@ void setup() {
   void readEncoderA();
 
 }
-
+int flip = true;
 void loop() {
 
   const int full_range = 1024;  // Uno analog input resolution
   const int deadBand = 30;  // measure how noisy the joystick in the neutral position, then set this large enough to ingore.
-  const int Tsample = 80;    //ms  set this as small as possible to achieve a decent number of counts to get a velocity reading.
+  const int Tsample = 150;    //ms  set this as small as possible to achieve a decent number of counts to get a velocity reading.
   const int maxSpeed = 200;  // max motor driver pwm input (motor saturates in rpm at about 190)
 
   // read the position in an atomic block
@@ -75,14 +75,32 @@ void loop() {
   if (elapsedTime >= Tsample) {
 
     // read Joystick Y position - uncomment to use joystick instead of step function
-    deltaY = abs(analogRead(VRY));
+    deltaY = abs(analogRead(VRY));  //comment out this line to use the step function inputs below
 
     // overide joystick to test a step function - comment out to use joystick values
-    //        unsigned long elapsedStepTime = currT - prevTime;
-    //        if (elapsedStepTime > 5000) {
-    //          deltaY = deltaY == valY_center ? 800 : valY_center;
-    //          prevTime = currT;
-    //        }
+    //   =====================================
+    //    unsigned long elapsedStepTime = currT - prevTime;
+    //    if (elapsedStepTime > 10000) {
+    //   =====================================
+    //     ** uncomment for repeated step function**
+    //     ============================    
+    //      deltaY = deltaY == valY_center ? 800 : valY_center;
+    //     ============================
+    
+    //    ** uncomment for repeated stairstep function**
+    //     ============================   
+    //      if (flip == true) {
+    //        deltaY += 100;
+    //        if (deltaY >= 900)  flip = false;
+    //      } else {
+    //        deltaY -= 100;
+    //        if (deltaY <= 530) flip = true;
+    //      }
+    //     ============================
+    //   =====================================    
+    //      prevTime = currT;
+    //    }
+    //   =======================================
 
     // motor speed from Y value
     int motorSpeedL = 0, motorSpeedR = 0;
@@ -110,6 +128,7 @@ void loop() {
            Speed (rpm) =  ------------------------------------------  = rev / m
                                        [ T.s(ms)*1m/60000ms ]                               */
 
+    // float v1 = (pos_a * 60000) / (PPR * Tsample);
     float v1 = (pos1 * 60000) / (PPR * Tsample);
 
     // Low-pass filter (25 Hz cutoff)
@@ -117,8 +136,8 @@ void loop() {
     v1Prev = v1;
 
     // Compute the control signal u
-    float kp = 1.4;
-    float ki = 1.0;
+    float kp = 1.0;
+    float ki = 0.9;
     float e = motorSpeedL - v1Filt;
     eintegral = eintegral + e * deltaT;
 
@@ -137,7 +156,7 @@ void loop() {
     runMotorL(PWM_L, dirMotorL);  // Left Motor
 
     // Output to plotter
-    Serial.print(250);
+    Serial.print(200);
     Serial.print(" ");
     Serial.print(0);
     Serial.print(" ");
