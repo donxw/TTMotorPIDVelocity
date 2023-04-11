@@ -34,7 +34,7 @@ Every 80 milliseconds the following actions occur:
 1)  Read the current encoder count
 2)  Read the Joystick Y axis input
 3)  Convert the Joystick input into a velocity command and direction
-    ![Joystick to RPM](https://user-images.githubusercontent.com/31633408/231205409-eb517838-5187-4957-a76d-a6d78b7019df.png)
+    ![Joystick to RPM](https://user-images.githubusercontent.com/31633408/231224850-81188bd7-6841-4a69-b4b9-39a1d0346bf6.png)
 4)  Compute the current speed of the motor using the number of encoder counts and elapse time
 ![image](https://user-images.githubusercontent.com/31633408/230810741-ed3456eb-4c98-4d36-bfc4-327f3b1e5607.png)
 5)  Filter the speed using a 25Hz low pass filter (see Curio Res reference)
